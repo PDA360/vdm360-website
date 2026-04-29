@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VDM 360&deg; &ndash; Value-Driven Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@200;300;400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--ink:#e9e6de;--muted:rgba(233,230,222,0.38);--rule:rgba(233,230,222,0.10);
+  --red:#fe0000;--green:#00af50;--blue:#0071c1;--yellow:#ffc000;
+  --strat:#69a8df;--tact:#318fcf;--oper:#335da3}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Source Sans 3',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;letter-spacing:.01em}
+[data-lang]{display:none}
+html[lang="en"] [data-lang="en"]{display:revert}
+html[lang="de"] [data-lang="de"]{display:revert}
+html[lang="en"] span[data-lang="en"],html[lang="en"] a[data-lang="en"]{display:inline}
+html[lang="de"] span[data-lang="de"],html[lang="de"] a[data-lang="de"]{display:inline}
+html[lang="en"] p[data-lang="en"],html[lang="en"] div[data-lang="en"],html[lang="en"] ul[data-lang="en"],html[lang="en"] li[data-lang="en"]{display:block}
+html[lang="de"] p[data-lang="de"],html[lang="de"] div[data-lang="de"],html[lang="de"] ul[data-lang="de"],html[lang="de"] li[data-lang="de"]{display:block}
+.lang-switcher{display:flex;align-items:center;gap:6px}
+.lang-btn{font-size:9px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);background:none;border:.5px solid rgba(233,230,222,.15);padding:4px 8px;cursor:pointer;font-family:inherit;transition:all .2s;line-height:1}
+.lang-btn:hover,.lang-btn.active{color:var(--ink);border-color:rgba(233,230,222,.45);background:rgba(233,230,222,.05)}
+.nav-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0}
+nav{position:fixed;top:0;left:0;right:0;z-index:99;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:60px;background:rgba(10,10,10,.97);border-bottom:.5px solid var(--rule);gap:16px}
+.nav-brand{text-decoration:none;display:flex;align-items:baseline;gap:10px;flex-shrink:1;min-width:0}
+.nav-brand-main{font-size:15px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
+.nav-brand-sub{font-size:13px;font-weight:300;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.nav-center{display:flex;gap:40px}
+.nav-center a{text-decoration:none;font-size:10px;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:color .25s;white-space:nowrap}
+.nav-center a:hover{color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:20px;flex-shrink:0}
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:60px}
+.hero-left{padding:90px 64px 72px;display:flex;flex-direction:column;justify-content:space-between;border-right:.5px solid var(--rule)}
+.hero-eyebrow{font-size:10px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.hero-main{margin-top:40px}
+.hero-title{font-size:clamp(48px,6vw,82px);font-weight:600;line-height:1.08;letter-spacing:.02em;color:var(--ink)}
+.hero-title strong{font-weight:600;display:block}
+.hero-body{margin-top:36px;max-width:400px}
+.hero-body p{font-size:14px;font-weight:300;line-height:1.85;color:var(--muted)}
+.hero-right{display:flex;flex-direction:column}
+.hstrip{position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:32px 44px 32px 28px;border-bottom:.5px solid rgba(233,230,222,.06);overflow:hidden;cursor:default;transition:padding-left .35s;flex:1}
+.hstrip:last-child{border-bottom:none}
+.hstrip:hover{padding-left:36px}
+.hstrip-bar{position:absolute;left:0;top:0;bottom:0;width:4px}
+.hstrip-bg{position:absolute;inset:0;opacity:0;transition:opacity .4s}
+.hstrip:hover .hstrip-bg{opacity:1}
+.hstrip-num{font-size:9px;font-weight:300;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.hstrip-name{font-size:26px;font-weight:300;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);line-height:1}
+.hstrip-sub{margin-top:5px;font-size:10px;font-weight:300;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.hero-tagline{padding:20px 36px;border-top:.5px solid var(--rule);font-size:9px;font-weight:300;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.section{padding:110px 64px;border-top:.5px solid var(--rule)}
+.s-head{display:flex;align-items:baseline;gap:18px;margin-bottom:64px}
+.s-dash{color:var(--muted);font-size:14px;font-weight:200}
+.s-title{font-size:clamp(28px,3.5vw,44px);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.about-grid{display:grid;grid-template-columns:2fr 1fr;gap:80px}
+.about-text p{font-size:14px;font-weight:300;line-height:1.9;color:var(--muted);max-width:520px;margin-bottom:20px}
+.about-text strong{color:var(--ink);font-weight:400}
+.num-row{padding:22px 0;border-bottom:.5px solid var(--rule)}
+.num-row:first-child{border-top:.5px solid var(--rule)}
+.num-big{font-size:42px;font-weight:200;line-height:1;color:var(--ink)}
+.num-label{margin-top:4px;font-size:9px;font-weight:300;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.focus-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule)}
+.focus-card{background:var(--bg);padding:48px 44px;border-top:2px solid transparent}
+.focus-card.growth{border-top-color:var(--green)}
+.focus-card.transform{border-top-color:var(--blue)}
+.focus-card.turnaround{border-top-color:var(--yellow)}
+.focus-card.crises{border-top-color:var(--red)}
+.focus-dot{width:7px;height:7px;border-radius:50%;margin-bottom:20px}
+.focus-title{font-size:18px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-bottom:8px}
+.focus-sub{font-size:10px;font-weight:300;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;padding-bottom:24px;border-bottom:.5px solid var(--rule)}
+.focus-body p{font-size:13px;font-weight:300;line-height:1.85;color:var(--muted);margin-bottom:18px}
+.focus-body p:last-child{margin-bottom:0}
+.focus-topic{font-size:12px;font-weight:400;color:var(--ink);letter-spacing:.04em;display:block;margin-bottom:4px}
+.focus-detail{font-size:12px;font-weight:300;color:var(--muted);line-height:1.7}
+.level-head{font-size:9px;font-weight:300;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:12px;border-bottom:.5px solid var(--rule);display:flex;align-items:center;gap:10px}
+.level-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.factors-block{margin-bottom:48px}
+.factors-block:last-child{margin-bottom:0}
+.factors-grid{border-left:.5px solid var(--rule);display:grid;grid-template-columns:repeat(6,1fr)}
+.f-item{padding:24px 18px 20px;border-right:.5px solid var(--rule);border-bottom:.5px solid var(--rule);border-top:1.5px solid transparent;transition:background .3s;cursor:default}
+.f-item:hover{background:rgba(233,230,222,.03)}
+.factors-block.strategic .f-item{border-top-color:var(--strat)}
+.factors-block.tactical .f-item{border-top-color:var(--tact)}
+.factors-block.operative .f-item{border-top-color:var(--oper)}
+.f-name{font-size:17px;font-weight:300;color:var(--ink);line-height:1.2}
+.collab-row{display:grid;grid-template-columns:88px 200px 1fr;padding:40px 0;border-bottom:.5px solid var(--rule);gap:48px;align-items:start}
+.collab-row:first-child{border-top:.5px solid var(--rule)}
+.c-tag{font-size:9px;font-weight:300;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);padding-top:4px}
+.c-name{font-size:22px;font-weight:200;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);line-height:1.1}
+.c-tagline{font-size:12px;font-weight:400;color:var(--ink);letter-spacing:.04em;margin-bottom:10px}
+.c-desc{font-size:13px;font-weight:300;line-height:1.85;color:var(--muted)}
+.closing{padding:130px 64px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;border-top:.5px solid var(--rule)}
+.cl-title{font-size:clamp(34px,4.5vw,60px);font-weight:200;line-height:1.1;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.cl-right{display:flex;flex-direction:column;gap:32px}
+.cl-right p{font-size:14px;font-weight:300;line-height:1.9;color:var(--muted);max-width:400px}
+.contact-section{padding:110px 64px;border-top:.5px solid var(--rule)}
+.contact-label{font-size:9px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+.contact-title{font-size:clamp(28px,3.5vw,44px);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);margin-bottom:32px}
+.contact-body p{font-size:14px;font-weight:300;line-height:1.9;color:var(--muted);max-width:420px;margin-bottom:40px}
+.contact-row{display:flex;align-items:baseline;gap:24px;padding:18px 0;border-bottom:.5px solid var(--rule)}
+.contact-row:first-child{border-top:.5px solid var(--rule)}
+.c-row-label{font-size:9px;font-weight:300;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);min-width:80px}
+.c-row-value{font-size:14px;font-weight:300;color:var(--ink);text-decoration:none;transition:opacity .25s}
+.c-row-value:hover{opacity:.5}
+footer{padding:28px 64px;border-top:.5px solid var(--rule);display:flex;justify-content:space-between;align-items:center}
+.f-brand{font-size:13px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.f-mid{font-size:9px;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.f-right{display:flex;align-items:center;gap:24px}
+.f-copy{font-size:9px;font-weight:300;letter-spacing:.14em;color:var(--muted)}
+.f-imp{font-size:9px;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);background:none;border:none;border-bottom:.5px solid rgba(233,230,222,.2);padding-bottom:1px;cursor:pointer;font-family:inherit;transition:color .25s}
+.f-imp:hover{color:var(--ink)}
+.imp-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:40px}
+.imp-overlay.open{display:flex}
+.imp-panel{background:#111;border:.5px solid var(--rule);max-width:760px;width:100%;max-height:84vh;overflow-y:auto;padding:56px 64px;position:relative;scrollbar-width:thin}
+.imp-close{position:absolute;top:24px;right:28px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;transition:color .2s;font-family:inherit;line-height:1}
+.imp-close:hover{color:var(--ink)}
+.imp-title{font-size:22px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin-bottom:8px}
+.imp-updated{font-size:9px;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:48px}
+.imp-section{margin-bottom:32px}
+.imp-stitle{font-size:10px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);margin-bottom:12px;padding-bottom:10px;border-bottom:.5px solid var(--rule)}
+.imp-section p,.imp-section li{font-size:13px;font-weight:300;line-height:1.85;color:var(--muted);margin-bottom:6px}
+.imp-section ul{list-style:none;padding:0}
+.imp-section ul li::before{content:"-- ";color:var(--muted)}
+.imp-section a{color:var(--muted);text-decoration:none;border-bottom:.5px solid var(--rule)}
+.imp-section a:hover{color:var(--ink)}
+.imp-section strong{color:var(--ink);font-weight:400}
+.fade{opacity:0;transform:translateY(10px);transition:opacity .85s ease,transform .85s ease}
+.fade.in{opacity:1;transform:none}
+@media(max-width:960px){
+  nav{padding:0 20px;gap:8px}
+  .nav-brand-sub{display:none}
+  .nav-center{display:none}
+  .hero{grid-template-columns:1fr}
+  .hero-left{padding:56px 24px;border-right:none}
+  .hero-right{display:none}
+  .section{padding:72px 24px}
+  .about-grid{grid-template-columns:1fr;gap:48px}
+  .focus-grid{grid-template-columns:1fr}
+  .factors-grid{grid-template-columns:repeat(3,1fr)}
+  .collab-row{grid-template-columns:1fr;gap:8px}
+  .c-tag{display:none}
+  .closing{grid-template-columns:1fr;padding:72px 24px}
+  .contact-section{padding:72px 24px}
+  footer{flex-direction:column;gap:16px;text-align:center;padding:32px 24px}
+  .imp-panel{padding:36px 24px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="#">
+    <span class="nav-brand-main">VDM 360&deg;</span>
+    <span class="nav-brand-sub">&middot; Value-Driven Management 360&deg;</span>
+  </a>
+  <div class="nav-center">
+    <a href="#about"><span data-lang="en">About</span><span data-lang="de">&Uuml;ber uns</span></a>
+    <a href="#focus"><span data-lang="en">Focus Areas</span><span data-lang="de">Fokusfelder</span></a>
+    <a href="#drivers"><span data-lang="en">Value Drivers</span><span data-lang="de">Werttreiber</span></a>
+    <a href="#collab"><span data-lang="en">Collaboration</span><span data-lang="de">Zusammenarbeit</span></a>
+    <a href="#contact"><span data-lang="en">Contact</span><span data-lang="de">Kontakt</span></a>
+  </div>
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="btn-de" onclick="setLang('de')">DE</button>
+    </div>
+    <img class="nav-logo" src="data:image/png;base64,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" alt="VDM 360">
+  </div>
+</nav>
+<header class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <span data-lang="en">AEC industry worldwide &nbsp;&middot;&nbsp; Unlock Your Potential</span>
+      <span data-lang="de">AEC-Branche weltweit &nbsp;&middot;&nbsp; Entfalten Sie Ihr Potenzial</span>
+    </div>
+    <div class="hero-main">
+      <h1 class="hero-title">
+        <strong>Value</strong><strong>Driven</strong><strong>Management 360&deg;</strong>
+      </h1>
+      <div class="hero-body">
+        <p data-lang="en">Value-Driven Management 360&deg; is a holistic, value-oriented approach that navigates AEC companies through the challenges of the modern business and market environment &mdash; integrating proven management theories with innovative methods to address complex, multidimensional, and digital challenges.</p>
+        <p data-lang="de">Value-Driven Management 360&deg; ist ein ganzheitlicher, wertorientierter Ansatz, der AEC-Unternehmen durch die Herausforderungen des modernen Gesch&auml;fts- und Marktumfelds navigiert &mdash; bew&auml;hrte Managementtheorien mit innovativen Methoden verbindend.</p>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div style="display:flex;flex-direction:column;flex:1">
+      <div class="hstrip">
+        <div class="hstrip-bar" style="background:var(--green)"></div>
+        <div class="hstrip-bg" style="background:linear-gradient(to right,rgba(0,175,80,.08),transparent)"></div>
+        <div class="hstrip-num">01</div>
+        <div class="hstrip-name"><span data-lang="en">Growth</span><span data-lang="de">Wachstum</span></div>
+        <div class="hstrip-sub"><span data-lang="en">Corporate Leadership &middot; Business Development &middot; Agile Sales</span><span data-lang="de">Unternehmensf&uuml;hrung &middot; Gesch&auml;ftsentwicklung &middot; Agiler Vertrieb</span></div>
+      </div>
+      <div class="hstrip">
+        <div class="hstrip-bar" style="background:var(--blue)"></div>
+        <div class="hstrip-bg" style="background:linear-gradient(to right,rgba(0,113,193,.08),transparent)"></div>
+        <div class="hstrip-num">02</div>
+        <div class="hstrip-name"><span data-lang="en">Transformation</span><span data-lang="de">Transformation</span></div>
+        <div class="hstrip-sub"><span data-lang="en">Performance &middot; Business Intelligence &middot; Digital</span><span data-lang="de">Performance &middot; Business Intelligence &middot; Digital</span></div>
+      </div>
+      <div class="hstrip">
+        <div class="hstrip-bar" style="background:var(--yellow)"></div>
+        <div class="hstrip-bg" style="background:linear-gradient(to right,rgba(255,192,0,.07),transparent)"></div>
+        <div class="hstrip-num">03</div>
+        <div class="hstrip-name"><span data-lang="en">Turnaround</span><span data-lang="de">Turnaround</span></div>
+        <div class="hstrip-sub"><span data-lang="en">Change Management &middot; Restructuring &middot; M&amp;A</span><span data-lang="de">Change Management &middot; Restrukturierung &middot; M&amp;A</span></div>
+      </div>
+      <div class="hstrip">
+        <div class="hstrip-bar" style="background:var(--red)"></div>
+        <div class="hstrip-bg" style="background:linear-gradient(to right,rgba(254,0,0,.07),transparent)"></div>
+        <div class="hstrip-num">04</div>
+        <div class="hstrip-name"><span data-lang="en">Crises</span><span data-lang="de">Krisen</span></div>
+        <div class="hstrip-sub"><span data-lang="en">Risk Management &middot; Liquidity &middot; Insolvency</span><span data-lang="de">Risikomanagement &middot; Liquidit&auml;t &middot; Insolvenz</span></div>
+      </div>
+    </div>
+    <div class="hero-tagline">
+      <span data-lang="en">Achieve Your Holistic 360&deg; Value Creation &nbsp;&middot;&nbsp; vdm360.de</span>
+      <span data-lang="de">Erreichen Sie Ihre ganzheitliche 360&deg; Wertsch&ouml;pfung &nbsp;&middot;&nbsp; vdm360.de</span>
+    </div>
+  </div>
+</header>
+<section class="section" id="about">
+  <div class="s-head fade"><span class="s-dash">&mdash;</span><h2 class="s-title"><span data-lang="en">The Framework</span><span data-lang="de">Das Framework</span></h2></div>
+  <div class="about-grid">
+    <div class="about-text fade">
+      <div data-lang="en">
+        <p><strong>Value-Driven Management 360&deg; (VDM 360&deg;)</strong> is a holistic, value-oriented approach that aims to navigate companies through the challenges of the modern business and market environment. VDM 360&deg; integrates proven management theories and practices with innovative methods to address complex, multidimensional, and digital challenges.</p>
+        <p>This philosophy finds application especially in the areas of Growth, Transformation, Turnaround, and Crisis Management. The framework operates across all enterprise levels simultaneously &mdash; strategic, tactical, and operative &mdash; ensuring that long-term intent and short-term execution remain permanently aligned.</p>
+        <p>In addition to these four focus areas, VDM 360&deg; offers five forms of collaboration to tailor services individually to the needs of each company &mdash; providing comprehensive and customized solutions for businesses in the AEC industry worldwide.</p>
+      </div>
+      <div data-lang="de">
+        <p><strong>Value-Driven Management 360&deg; (VDM 360&deg;)</strong> ist ein ganzheitlicher, wertorientierter Ansatz, der Unternehmen durch die Herausforderungen des modernen Gesch&auml;fts- und Marktumfelds navigiert. VDM 360&deg; integriert bew&auml;hrte Managementtheorien mit innovativen Methoden, um komplexe, mehrdimensionale und digitale Herausforderungen zu bew&auml;ltigen.</p>
+        <p>Diese Philosophie findet insbesondere in den Bereichen Wachstum, Transformation, Turnaround und Krisenmanagement Anwendung. Das Framework wirkt gleichzeitig auf allen Unternehmensebenen &mdash; strategisch, taktisch und operativ &mdash; und stellt sicher, dass langfristige Absichten und kurzfristige Ausf&uuml;hrung dauerhaft aufeinander abgestimmt bleiben.</p>
+        <p>Neben diesen vier Fokusfeldern bietet VDM 360&deg; f&uuml;nf Formen der Zusammenarbeit an, um Leistungen individuell auf die Bed&uuml;rfnisse jedes Unternehmens zuzuschneiden &mdash; umfassende und ma&szlig;geschneiderte L&ouml;sungen f&uuml;r Unternehmen der AEC-Branche weltweit.</p>
+      </div>
+    </div>
+    <div class="fade">
+      <div class="num-row"><div class="num-big">18</div><div class="num-label"><span data-lang="en">Value Drivers</span><span data-lang="de">Werttreiber</span></div></div>
+      <div class="num-row"><div class="num-big">3</div><div class="num-label"><span data-lang="en">Enterprise Levels</span><span data-lang="de">Unternehmensebenen</span></div></div>
+      <div class="num-row"><div class="num-big">4</div><div class="num-label"><span data-lang="en">Focus Areas</span><span data-lang="de">Fokusfelder</span></div></div>
+      <div class="num-row"><div class="num-big">5</div><div class="num-label"><span data-lang="en">Collaboration Forms</span><span data-lang="de">Kooperationsformen</span></div></div>
+    </div>
+  </div>
+</section>
+<section class="section" id="focus">
+  <div class="s-head fade"><span class="s-dash">&mdash;</span><h2 class="s-title"><span data-lang="en">Four Focus Areas</span><span data-lang="de">Vier Fokusfelder</span></h2></div>
+  <div class="focus-grid fade">
+    <div class="focus-card growth">
+      <div class="focus-dot" style="background:var(--green)"></div>
+      <div class="focus-title"><span data-lang="en">Growth</span><span data-lang="de">Wachstum</span></div>
+      <div class="focus-sub"><span data-lang="en">Corporate Leadership &amp; Strategy &middot; Business Development &amp; Expansion &middot; Customer Focus &amp; Agile Sales</span><span data-lang="de">Unternehmensf&uuml;hrung &amp; Strategie &middot; Gesch&auml;ftsentwicklung &amp; Expansion &middot; Kundenfokus &amp; Agiler Vertrieb</span></div>
+      <div class="focus-body">
+        <p data-lang="en">Within VDM 360&deg;, Growth plays a central role, focusing on developing and implementing sustainable strategies to make companies future-proof and competitive. Corporate leadership, business development, and customer-oriented sales approaches are at the center.</p>
+        <p data-lang="de">Im Rahmen von VDM 360&deg; spielt Wachstum eine zentrale Rolle und konzentriert sich auf die Entwicklung nachhaltiger Strategien, um Unternehmen zukunftssicher und wettbewerbsf&auml;hig zu machen.</p>
+        <p><span class="focus-topic"><span data-lang="en">Corporate Leadership &amp; Strategy</span><span data-lang="de">Unternehmensf&uuml;hrung &amp; Strategie</span></span><span class="focus-detail"><span data-lang="en">Development and implementation of long-term strategies for sustainable growth. Creation of a clear vision and mission that inspires and guides the entire company.</span><span data-lang="de">Entwicklung und Umsetzung langfristiger Strategien f&uuml;r nachhaltiges Wachstum. Schaffung einer klaren Vision und Mission, die das gesamte Unternehmen inspiriert.</span></span></p>
+        <p><span class="focus-topic"><span data-lang="en">Business Development &amp; Expansion</span><span data-lang="de">Gesch&auml;ftsentwicklung &amp; Expansion</span></span><span class="focus-detail"><span data-lang="en">Identification and development of new business opportunities and markets. Building strategic partnerships and alliances to expand market reach.</span><span data-lang="de">Identifikation und Erschlie&szlig;ung neuer Gesch&auml;ftsm&ouml;glichkeiten und M&auml;rkte. Aufbau strategischer Partnerschaften zur Erweiterung der Marktpr&auml;senz.</span></span></p>
+        <p><span class="focus-topic"><span data-lang="en">Customer Focus &amp; Agile Sales</span><span data-lang="de">Kundenfokus &amp; Agiler Vertrieb</span></span><span class="focus-detail"><span data-lang="en">Implementation of customer-oriented strategies placing customer needs at the center. Use of agile sales approaches to respond quickly to market changes and customer feedback.</span><span data-lang="de">Umsetzung kundenorientierter Strategien, die Kundenbedürfnisse in den Mittelpunkt stellen. Einsatz agiler Vertriebsans&auml;tze f&uuml;r schnelle Reaktion auf Marktver&auml;nderungen.</span></span></p>
+      </div>
+    </div>
+    <div class="focus-card transform">
+      <div class="focus-dot" style="background:var(--blue)"></div>
+      <div class="focus-title"><span data-lang="en">Transformation</span><span data-lang="de">Transformation</span></div>
+      <div class="focus-sub"><span data-lang="en">Performance Improvement &middot; Business Intelligence &amp; Data Analytics &middot; Digital Transformation</span><span data-lang="de">Performance-Verbesserung &middot; Business Intelligence &amp; Datenanalytik &middot; Digitale Transformation</span></div>
+      <div class="focus-body">
+        <p data-lang="en">Transformation within VDM 360&deg; concentrates on transforming companies through performance improvements, data-driven decisions, and digital innovations &mdash; increasing efficiency, creating new value opportunities, and fostering an agile, innovation-driven culture.</p>
+        <p data-lang="de">Transformation im Rahmen von VDM 360&deg; konzentriert sich auf die Unternehmenstransformation durch Leistungsverbesserungen, datengetriebene Entscheidungen und digitale Innovationen.</p>
+        <p><span class="focus-topic"><span data-lang="en">Performance Improvement</span><span data-lang="de">Performance-Verbesserung</span></span><span class="focus-detail"><span data-lang="en">Optimizing operational efficiency through process improvements and innovation initiatives. Application of Lean and Six Sigma methods to reduce waste and improve quality.</span><span data-lang="de">Optimierung der operativen Effizienz durch Prozessverbesserungen. Anwendung von Lean- und Six-Sigma-Methoden zur Reduzierung von Verschwendung und Qualit&auml;tsverbesserung.</span></span></p>
+        <p><span class="focus-topic"><span data-lang="en">Business Intelligence &amp; Data Analytics</span><span data-lang="de">Business Intelligence &amp; Datenanalytik</span></span><span class="focus-detail"><span data-lang="en">Use of advanced data analysis and BI tools for informed business decisions. Implementation of data strategies enabling real-time insights and forecasts.</span><span data-lang="de">Einsatz fortschrittlicher Datenanalyse- und BI-Tools f&uuml;r fundierte Gesch&auml;ftsentscheidungen und Echtzeit-Einblicke.</span></span></p>
+        <p><span class="focus-topic"><span data-lang="en">Digital Transformation</span><span data-lang="de">Digitale Transformation</span></span><span class="focus-detail"><span data-lang="en">Integration of digital technologies across all business areas to create new value opportunities and foster a culture of innovation and agility.</span><span data-lang="de">Integration digitaler Technologien in alle Gesch&auml;ftsbereiche zur Schaffung neuer Wertchancen und F&ouml;rderung einer Innovationskultur.</span></span></p>
+      </div>
+    </div>
+    <div class="focus-card turnaround">
+      <div class="focus-dot" style="background:var(--yellow)"></div>
+      <div class="focus-title"><span data-lang="en">Turnaround</span><span data-lang="de">Turnaround</span></div>
+      <div class="focus-sub"><span data-lang="en">Change Management &middot; Restructuring &middot; (Distressed) M&amp;A</span><span data-lang="de">Change Management &middot; Restrukturierung &middot; (Distressed) M&amp;A</span></div>
+      <div class="focus-body">
+        <p data-lang="en">Turnaround within VDM 360&deg; concentrates on getting companies back on course through effective change management, restructuring, and strategic M&amp;A &mdash; ensuring financial stability and increasing profitability.</p>
+        <p data-lang="de">Turnaround im Rahmen von VDM 360&deg; konzentriert sich darauf, Unternehmen durch effektives Change Management, Restrukturierung und strategische M&amp;A wieder auf Kurs zu bringen.</p>
+        <p><span class="focus-topic"><span data-lang="en">Change Management</span><span data-lang="de">Change Management</span></span><span class="focus-detail"><span data-lang="en">Conducting effective change management to guide organizations through transformation. Ensuring employee participation and acceptance through clear communication and training.</span><span data-lang="de">Durchf&uuml;hrung effektiver Change-Management-Prozesse. Sicherstellung der Mitarbeiterbeteiligung durch klare Kommunikation und Schulungen.</span></span></p>
+        <p><span class="focus-topic"><span data-lang="en">Restructuring</span><span data-lang="de">Restrukturierung</span></span><span class="focus-detail"><span data-lang="en">Redesigning business structures and processes to ensure financial stability and efficiency. Rationalization of operations to increase profitability.</span><span data-lang="de">Neugestaltung von Unternehmensstrukturen und -prozessen zur Sicherung finanzieller Stabilit&auml;t und Effizienz.</span></span></p>
+        <p><span class="focus-topic"><span data-lang="en">(Distressed) Mergers &amp; Acquisitions</span><span data-lang="de">(Distressed) Fusionen &amp; &Uuml;bernahmen</span></span><span class="focus-detail"><span data-lang="en">Conducting and integrating M&amp;A, especially in financially distressed situations. Assessment and mitigation of risks associated with corporate takeovers.</span><span data-lang="de">Durchf&uuml;hrung und Integration von M&amp;A, insbesondere in finanziell angespannten Situationen. Bewertung und Minderung verbundener Risiken.</span></span></p>
+      </div>
+    </div>
+    <div class="focus-card crises">
+      <div class="focus-dot" style="background:var(--red)"></div>
+      <div class="focus-title"><span data-lang="en">Crises</span><span data-lang="de">Krisen</span></div>
+      <div class="focus-sub"><span data-lang="en">Risk &amp; Crisis Management &middot; Capital Access &amp; Liquidity &middot; Restructuring &amp; Insolvency</span><span data-lang="de">Risiko- &amp; Krisenmanagement &middot; Kapitalbeschaffung &amp; Liquidit&auml;t &middot; Restrukturierung &amp; Insolvenz</span></div>
+      <div class="focus-body">
+        <p data-lang="en">Crisis Management within VDM 360&deg; concentrates on stabilizing companies through effective risk management, securing capital access, and targeted restructuring &mdash; keeping companies capable of action in difficult times and ensuring orderly resolution when necessary.</p>
+        <p data-lang="de">Krisenmanagement im Rahmen von VDM 360&deg; konzentriert sich auf die Stabilisierung von Unternehmen durch effektives Risikomanagement, Sicherung des Kapitalzugangs und gezielte Restrukturierungsma&szlig;nahmen.</p>
+        <p><span class="focus-topic"><span data-lang="en">Risk &amp; Crisis Management</span><span data-lang="de">Risiko- &amp; Krisenmanagement</span></span><span class="focus-detail"><span data-lang="en">Identification and assessment of potential risks threatening the company. Development of crisis management plans to respond effectively to unexpected events.</span><span data-lang="de">Identifikation und Bewertung potenzieller Risiken. Entwicklung von Krisenmanagementpl&auml;nen zur effektiven Reaktion auf unerwartete Ereignisse.</span></span></p>
+        <p><span class="focus-topic"><span data-lang="en">Capital Access &amp; Liquidity</span><span data-lang="de">Kapitalbeschaffung &amp; Liquidit&auml;t</span></span><span class="focus-detail"><span data-lang="en">Ensuring access to necessary capital and liquidity to maintain business operations. Negotiations with investors, banks, and financial institutions for support in times of crisis.</span><span data-lang="de">Sicherstellung des Zugangs zu notwendigem Kapital und Liquidit&auml;t. Verhandlungen mit Investoren und Banken zur Unterst&uuml;tzung in Krisenzeiten.</span></span></p>
+        <p><span class="focus-topic"><span data-lang="en">Restructuring &amp; Insolvency</span><span data-lang="de">Restrukturierung &amp; Insolvenz</span></span><span class="focus-detail"><span data-lang="en">Development of restructuring plans to restore financial health. Conducting insolvency proceedings to ensure orderly resolution and best possible creditor protection.</span><span data-lang="de">Entwicklung von Restrukturierungspl&auml;nen zur Wiederherstellung der finanziellen Gesundheit. Durchf&uuml;hrung von Insolvenzverfahren bei Bedarf.</span></span></p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section" id="drivers">
+  <div class="s-head fade"><span class="s-dash">&mdash;</span><h2 class="s-title"><span data-lang="en">18 Value Drivers</span><span data-lang="de">18 Werttreiber</span></h2></div>
+  <div class="factors-block strategic fade">
+    <div class="level-head"><span class="level-dot" style="background:var(--strat)"></span><span data-lang="en">Strategic Level &nbsp;&middot;&nbsp; Long-term</span><span data-lang="de">Strategische Ebene &nbsp;&middot;&nbsp; Langfristig</span></div>
+    <div class="factors-grid">
+      <div class="f-item"><div class="f-name"><span data-lang="en">Leadership</span><span data-lang="de">F&uuml;hrung</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Capital</span><span data-lang="de">Kapital</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Assets</span><span data-lang="de">Verm&ouml;gen</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Brand</span><span data-lang="de">Marke</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Innovation</span><span data-lang="de">Innovation</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Technology</span><span data-lang="de">Technologie</span></div></div>
+    </div>
+  </div>
+  <div class="factors-block tactical fade">
+    <div class="level-head"><span class="level-dot" style="background:var(--tact)"></span><span data-lang="en">Tactical Level &nbsp;&middot;&nbsp; Mid-term</span><span data-lang="de">Taktische Ebene &nbsp;&middot;&nbsp; Mittelfristig</span></div>
+    <div class="factors-grid">
+      <div class="f-item"><div class="f-name"><span data-lang="en">Product / Service</span><span data-lang="de">Produkt / Dienst</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Quality</span><span data-lang="de">Qualit&auml;t</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Market</span><span data-lang="de">Markt</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Customer</span><span data-lang="de">Kunde</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Regulations</span><span data-lang="de">Regulierung</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Employees</span><span data-lang="de">Mitarbeiter</span></div></div>
+    </div>
+  </div>
+  <div class="factors-block operative fade">
+    <div class="level-head"><span class="level-dot" style="background:var(--oper)"></span><span data-lang="en">Operational Level &nbsp;&middot;&nbsp; Short-term</span><span data-lang="de">Operative Ebene &nbsp;&middot;&nbsp; Kurzfristig</span></div>
+    <div class="factors-grid">
+      <div class="f-item"><div class="f-name"><span data-lang="en">Supply Chain</span><span data-lang="de">Lieferkette</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Processes</span><span data-lang="de">Prozesse</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">IT</span><span data-lang="de">IT</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Finance</span><span data-lang="de">Finanzen</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Projects</span><span data-lang="de">Projekte</span></div></div>
+      <div class="f-item"><div class="f-name"><span data-lang="en">Orders</span><span data-lang="de">Auftr&auml;ge</span></div></div>
+    </div>
+  </div>
+</section>
+<section class="section" id="collab">
+  <div class="s-head fade"><span class="s-dash">&mdash;</span><h2 class="s-title"><span data-lang="en">Five Forms of Collaboration</span><span data-lang="de">F&uuml;nf Formen der Zusammenarbeit</span></h2></div>
+  <div class="collab-row fade">
+    <div class="c-tag">01</div>
+    <div class="c-name"><span data-lang="en">Institute</span><span data-lang="de">Institute</span></div>
+    <div>
+      <div class="c-tagline"><span data-lang="en">Enhance Your Knowledge. Enrich Your Business.</span><span data-lang="de">Erweitern Sie Ihr Wissen. Bereichern Sie Ihr Unternehmen.</span></div>
+      <div class="c-desc"><span data-lang="en">The VDM 360&deg; Institute offers specialized articles, training, and development programs aimed at expanding the knowledge and skills of participants. Our holistic approach to knowledge transfer promotes comprehensive 360&deg; value creation that helps companies successfully master the challenges of the modern business and market environment. Our tailored programs deepen professional expertise and improve practical skills &mdash; providing current and relevant content to ensure participants are best prepared for dynamic market requirements.</span><span data-lang="de">Das VDM 360&deg; Institut bietet spezialisierte Artikel, Trainings und Entwicklungsprogramme, die darauf abzielen, Wissen und F&auml;higkeiten der Teilnehmer zu erweitern. Unser ganzheitlicher Ansatz zum Wissenstransfer f&ouml;rdert eine umfassende 360&deg; Wertsch&ouml;pfung. Unsere ma&szlig;geschneiderten Programme vertiefen Fachkompetenz und verbessern Praxisf&auml;higkeiten &mdash; mit aktuellen und relevanten Inhalten f&uuml;r dynamische Marktanforderungen.</span></div>
+    </div>
+  </div>
+  <div class="collab-row fade">
+    <div class="c-tag">02</div>
+    <div class="c-name"><span data-lang="en">Advisory</span><span data-lang="de">Advisory</span></div>
+    <div>
+      <div class="c-tagline"><span data-lang="en">Optimize Your Strategy. Develop Your Company.</span><span data-lang="de">Optimieren Sie Ihre Strategie. Entwickeln Sie Ihr Unternehmen.</span></div>
+      <div class="c-desc"><span data-lang="en">The VDM 360&deg; Advisory offering supports companies in optimizing their strategies and efficiently achieving their business goals. Our holistic, value-oriented approach combines proven management methods with innovative solutions to help overcome complex, multidimensional, and digital challenges. Through sound analysis and practice-oriented recommendations, we ensure that companies can make the best decisions &mdash; promoting a comprehensive view that considers all aspects of the value chain.</span><span data-lang="de">Das VDM 360&deg; Advisory-Angebot unterst&uuml;tzt Unternehmen bei der Optimierung ihrer Strategien und der effizienten Erreichung ihrer Gesch&auml;ftsziele. Unser ganzheitlicher, wertorientierter Ansatz kombiniert bew&auml;hrte Managementmethoden mit innovativen L&ouml;sungen. Durch fundierte Analysen und praxisorientierte Empfehlungen erm&ouml;glichen wir die bestm&ouml;glichen Entscheidungen &mdash; mit einem umfassenden Blick auf die gesamte Wertsch&ouml;pfungskette.</span></div>
+    </div>
+  </div>
+  <div class="collab-row fade">
+    <div class="c-tag">03</div>
+    <div class="c-name"><span data-lang="en">Interim</span><span data-lang="de">Interim</span></div>
+    <div>
+      <div class="c-tagline"><span data-lang="en">Bridge Gaps. Lead to Optimal Performance.</span><span data-lang="de">L&uuml;cken &uuml;berbr&uuml;cken. Zur optimalen Performance f&uuml;hren.</span></div>
+      <div class="c-desc"><span data-lang="en">Bridge gaps in your organization with experienced interim managers and lead the company to optimal performance. Whether due to sudden departures, mergers, takeovers, or restructuring &mdash; our interim managers ensure smooth operations. They work closely with your team to overcome immediate challenges and implement sustainable solutions, fostering a culture of continuous improvement.</span><span data-lang="de">&Uuml;berbr&uuml;cken Sie L&uuml;cken in Ihrer Organisation mit erfahrenen Interim-Managern. Ob durch pl&ouml;tzliche Abg&auml;nge, Fusionen, &Uuml;bernahmen oder Restrukturierungen &mdash; unsere Interim-Manager sichern einen reibungslosen Betrieb und implementieren nachhaltige L&ouml;sungen im engen Austausch mit Ihrem Team.</span></div>
+    </div>
+  </div>
+  <div class="collab-row fade">
+    <div class="c-tag">04</div>
+    <div class="c-name"><span data-lang="en">Board</span><span data-lang="de">Board</span></div>
+    <div>
+      <div class="c-tagline"><span data-lang="en">Lead with Vision. Secure Long-Term Success.</span><span data-lang="de">Mit Vision f&uuml;hren. Langfristigen Erfolg sichern.</span></div>
+      <div class="c-desc"><span data-lang="en">Lead with vision through strategic initiatives at the supervisory level and ensure effective governance and long-term success. Our board services provide companies with experienced board members who have in-depth industry knowledge and extensive experience in corporate governance &mdash; working closely with management to develop long-term strategies and ensure company goals are achieved sustainably.</span><span data-lang="de">F&uuml;hren Sie mit Vision durch strategische Initiativen auf Aufsichtsratsebene. Unsere Board-Services stellen Unternehmen erfahrene Mitglieder mit fundierten Branchenkenntnissen und umfangreicher Governance-Erfahrung zur Verf&uuml;gung &mdash; die eng mit dem Management zusammenarbeiten, um langfristige Strategien zu entwickeln und Ziele nachhaltig zu erreichen.</span></div>
+    </div>
+  </div>
+  <div class="collab-row fade">
+    <div class="c-tag">05</div>
+    <div class="c-name"><span data-lang="en">Equity</span><span data-lang="de">Equity</span></div>
+    <div>
+      <div class="c-tagline"><span data-lang="en">Maximize Investment Potential. Foster Financial Growth.</span><span data-lang="de">Investitionspotenzial maximieren. Finanzielles Wachstum f&ouml;rdern.</span></div>
+      <div class="c-desc"><span data-lang="en">Maximize investment potential with tailor-made equity solutions that promote financial growth and stability. Our equity services provide companies with access to the capital they need to realize their growth plans &mdash; offering a comprehensive range from equity financing to exit strategies to ensure companies achieve their financial goals and create sustainable value.</span><span data-lang="de">Maximieren Sie das Investitionspotenzial mit ma&szlig;geschneiderten Eigenkapitall&ouml;sungen, die finanzielles Wachstum und Stabilit&auml;t f&ouml;rdern. Unsere Equity-Services verschaffen Unternehmen Zugang zum ben&ouml;tigten Kapital &mdash; von der Eigenkapitalfinanzierung bis zur Exit-Strategie &mdash; zur Maximierung der Rendite bei gleichzeitiger Risikominimierung.</span></div>
+    </div>
+  </div>
+</section>
+<div class="closing" id="closing">
+  <div class="cl-title fade"><span data-lang="en">Achieve<br>Your Holistic<br>360&deg; Value<br>Creation</span><span data-lang="de">Erreichen Sie<br>Ihre ganzheitliche<br>360&deg; Wert&shy;sch&ouml;pfung</span></div>
+  <div class="cl-right fade">
+    <p data-lang="en">VDM 360&deg; offers tailor-made business DNA &mdash; designed specifically around the needs of your company. Growth, Transformation, Turnaround, or Crisis Management: we design the right collaboration form for your specific situation.</p>
+    <p data-lang="de">VDM 360&deg; bietet ma&szlig;geschneiderte Unternehmens-DNA &mdash; speziell auf die Bed&uuml;rfnisse Ihres Unternehmens ausgerichtet. Wachstum, Transformation, Turnaround oder Krisenmanagement: Wir gestalten die richtige Kooperationsform f&uuml;r Ihre spezifische Situation.</p>
+    <p style="color:var(--muted);font-size:13px"><span data-lang="en">Dresden &middot; AEC industry worldwide &middot; Operational Excellence</span><span data-lang="de">Dresden &middot; AEC-Branche weltweit &middot; Operational Excellence</span></p>
+  </div>
+</div>
+
+<section class="contact-section" id="contact">
+  <div class="fade">
+    <div class="contact-label"><span data-lang="en">Get in Touch</span><span data-lang="de">Kontakt aufnehmen</span></div>
+    <div class="contact-title"><span data-lang="en">Contact</span><span data-lang="de">Kontakt</span></div>
+    <div class="contact-body">
+      <p data-lang="en">Every engagement begins with a conversation. Tell us where your company stands &mdash; and where it needs to go. We will design the right collaboration form around your specific situation.</p>
+      <p data-lang="de">Jede Zusammenarbeit beginnt mit einem Gespr&auml;ch. Schildern Sie uns, wo Ihr Unternehmen steht &mdash; und wohin es gehen soll. Wir gestalten die richtige Kooperationsform f&uuml;r Ihre spezifische Situation.</p>
+    </div>
+    <div>
+      <div class="contact-row"><span class="c-row-label">Website</span><a href="https://www.vdm360.de" class="c-row-value">www.vdm360.de</a></div>
+      <div class="contact-row"><span class="c-row-label">Email</span><a href="mailto:info@vdm360.de" class="c-row-value">info@vdm360.de</a></div>
+      <div class="contact-row"><span class="c-row-label"><span data-lang="en">Location</span><span data-lang="de">Standort</span></span><span class="c-row-value">Dresden &middot; Saxony &middot; Germany</span></div>
+      <div class="contact-row"><span class="c-row-label"><span data-lang="en">Industry</span><span data-lang="de">Branche</span></span><span class="c-row-value"><span data-lang="en">AEC industry worldwide</span><span data-lang="de">AEC-Branche weltweit</span></span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-brand">VDM 360&deg; &middot; Value-Driven Management 360&deg;</div>
+  <div class="f-mid">Institute &middot; Advisory &middot; Interim &middot; Board &middot; Equity</div>
+  <div class="f-right">
+    <span class="f-copy">&copy; 2025 &middot; <span data-lang="en">AEC industry worldwide</span><span data-lang="de">AEC-Branche weltweit</span></span>
+    <button class="f-imp" onclick="document.getElementById('imprint').classList.add('open')"><span data-lang="en">Imprint &amp; Privacy</span><span data-lang="de">Impressum &amp; Datenschutz</span></button>
+  </div>
+</footer>
+<div class="imp-overlay" id="imprint" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="imp-panel">
+    <button class="imp-close" onclick="document.getElementById('imprint').classList.remove('open')">&times;</button>
+    <div class="imp-title"><span data-lang="en">Legal Notice &amp; Privacy Policy</span><span data-lang="de">Impressum &amp; Datenschutzerkl&auml;rung</span></div>
+    <div class="imp-updated"><span data-lang="en">Last updated: April 2025 &nbsp;&middot;&nbsp; EU (GDPR/DSGVO) &middot; Germany (TMG/UWG) &middot; USA (CCPA/CAN-SPAM/COPPA)</span><span data-lang="de">Zuletzt aktualisiert: April 2025 &nbsp;&middot;&nbsp; EU (DSGVO/GDPR) &middot; Deutschland (TMG/UWG) &middot; USA (CCPA/CAN-SPAM/COPPA)</span></div>
+
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">1 &middot; Company Information (Impressum)</span><span data-lang="de">1 &middot; Unternehmensangaben (Impressum)</span></div>
+      <p><strong>VDM 360&deg;</strong> &middot; Value-Driven Management<br>Jane Doe Street 1 &middot; 01234 Dresden &middot; Saxony &middot; Germany</p>
+      <p data-lang="en">Required under &sect; 5 TMG and &sect; 2 DL-InfoV.</p>
+      <p data-lang="de">Erforderlich gem&auml;&szlig; &sect; 5 TMG und &sect; 2 DL-InfoV.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">2 &middot; Managing Director</span><span data-lang="de">2 &middot; Gesch&auml;ftsf&uuml;hrung</span></div>
+      <p>John Doe &nbsp;&middot;&nbsp; Jane Doe</p>
+      <p data-lang="en">Responsible for editorial content pursuant to &sect; 18 para. 2 MStV.</p>
+      <p data-lang="de">Verantwortlich f&uuml;r redaktionelle Inhalte gem&auml;&szlig; &sect; 18 Abs. 2 MStV.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">3 &middot; Contact</span><span data-lang="de">3 &middot; Kontakt</span></div>
+      <p>E-Mail: <a href="mailto:info@vdm360.de">info@vdm360.de</a> &nbsp;&middot;&nbsp; Website: <a href="https://www.vdm360.de" target="_blank">www.vdm360.de</a></p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">4 &middot; Commercial Register</span><span data-lang="de">4 &middot; Handelsregister</span></div>
+      <p><span data-lang="en">Register Court: Amtsgericht Dresden &nbsp;&middot;&nbsp; Register Number: HRB XXX</span><span data-lang="de">Registergericht: Amtsgericht Dresden &nbsp;&middot;&nbsp; Registernummer: HRB XXX</span></p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">5 &middot; VAT Identification Number</span><span data-lang="de">5 &middot; Umsatzsteuer-Identifikationsnummer</span></div>
+      <p data-lang="en">Pursuant to &sect; 27a UStG: <strong>DE XXX XXX XXX</strong></p>
+      <p data-lang="de">Gem&auml;&szlig; &sect; 27a UStG: <strong>DE XXX XXX XXX</strong></p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">6 &middot; Professional Liability</span><span data-lang="de">6 &middot; Berufshaftung</span></div>
+      <p data-lang="en">VDM 360&deg; provides management consulting and advisory services. No statutory licensing requirement applies under German law. Professional liability insurance information available upon request at <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+      <p data-lang="de">VDM 360&deg; erbringt Unternehmensberatungs- und Advisory-Dienstleistungen. Keine gesetzliche Zulassungspflicht nach deutschem Recht. Informationen zur Berufshaftpflichtversicherung auf Anfrage unter <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">7 &middot; Data Controller (GDPR Art. 13/14)</span><span data-lang="de">7 &middot; Verantwortliche Stelle (DSGVO Art. 13/14)</span></div>
+      <p data-lang="en">The controller for processing personal data on this website within the meaning of the GDPR and BDSG is:</p>
+      <p data-lang="de">Die verantwortliche Stelle f&uuml;r die Verarbeitung personenbezogener Daten auf dieser Website im Sinne der DSGVO und des BDSG ist:</p>
+      <p><strong>VDM 360&deg;</strong> &middot; Jane Doe Street 1 &middot; 01234 Dresden &middot; Germany &middot; <a href="mailto:info@vdm360.de">info@vdm360.de</a></p>
+      <p data-lang="en">All data protection enquiries handled within 30 days (GDPR Art. 12) or 45 days (CCPA).</p>
+      <p data-lang="de">Alle Datenschutzanfragen werden innerhalb von 30 Tagen (DSGVO Art. 12) bzw. 45 Tagen (CCPA) bearbeitet.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">8 &middot; Data Protection Officer</span><span data-lang="de">8 &middot; Datenschutzbeauftragter</span></div>
+      <p data-lang="en">VDM 360&deg; is not currently required to appoint a mandatory DPO under Art. 37 GDPR. For all data protection matters contact <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+      <p data-lang="de">VDM 360&deg; ist derzeit nicht zur Bestellung eines Datenschutzbeauftragten gem&auml;&szlig; Art. 37 DSGVO verpflichtet. F&uuml;r Datenschutzangelegenheiten: <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">9 &middot; Data We Collect</span><span data-lang="de">9 &middot; Erhobene Daten</span></div>
+      <p data-lang="en"><strong>Automatically collected:</strong> IP address (anonymised), browser type, OS, referring URL, visit duration, pages viewed.</p>
+      <p data-lang="de"><strong>Automatisch erhoben:</strong> IP-Adresse (anonymisiert), Browser-Typ, Betriebssystem, verweisende URL, Besuchsdauer, aufgerufene Seiten.</p>
+      <p data-lang="en"><strong>Provided voluntarily:</strong> Name, email address, company name, job title, message content (when contacting us).</p>
+      <p data-lang="de"><strong>Freiwillig bereitgestellt:</strong> Name, E-Mail-Adresse, Unternehmensname, Berufsbezeichnung, Nachrichteninhalt (bei Kontaktaufnahme).</p>
+      <p data-lang="en">We do not collect special categories of personal data (Art. 9 GDPR) such as health data, racial or ethnic origin, or political opinions.</p>
+      <p data-lang="de">Wir erheben keine besonderen Kategorien personenbezogener Daten (Art. 9 DSGVO) wie Gesundheitsdaten, rassische Herkunft oder politische Meinungen.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">10 &middot; Purpose &amp; Legal Basis of Processing</span><span data-lang="de">10 &middot; Zweck &amp; Rechtsgrundlage der Verarbeitung</span></div>
+      <p data-lang="en"><strong>Website operation</strong> &mdash; Art. 6(1)(f) GDPR: operate, secure, and improve the site.</p>
+      <p data-lang="de"><strong>Website-Betrieb</strong> &mdash; Art. 6 Abs. 1 lit. f DSGVO: Betrieb, Sicherung und Verbesserung der Website.</p>
+      <p data-lang="en"><strong>Responding to enquiries</strong> &mdash; Art. 6(1)(b) GDPR: respond to requests and manage business relationships.</p>
+      <p data-lang="de"><strong>Beantwortung von Anfragen</strong> &mdash; Art. 6 Abs. 1 lit. b DSGVO: Beantwortung von Anfragen und Verwaltung von Gesch&auml;ftsbeziehungen.</p>
+      <p data-lang="en"><strong>Marketing communications</strong> &mdash; Art. 6(1)(a) GDPR: only with explicit, freely given consent. Consent may be withdrawn at any time.</p>
+      <p data-lang="de"><strong>Marketingkommunikation</strong> &mdash; Art. 6 Abs. 1 lit. a DSGVO: nur mit ausdr&uuml;cklicher, freiwilliger Einwilligung. Jederzeit widerrufbar.</p>
+      <p data-lang="en"><strong>Legal obligations</strong> &mdash; Art. 6(1)(c) GDPR: comply with tax, commercial, and regulatory requirements.</p>
+      <p data-lang="de"><strong>Rechtliche Verpflichtungen</strong> &mdash; Art. 6 Abs. 1 lit. c DSGVO: Erf&uuml;llung steuer-, handels- und aufsichtsrechtlicher Pflichten.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">11 &middot; Cookies &amp; Tracking</span><span data-lang="de">11 &middot; Cookies &amp; Tracking</span></div>
+      <p data-lang="en">This website uses only technically necessary cookies exempt from consent requirements under Art. 6(1)(f) GDPR and &sect; 25 para. 2 TTDSG. No advertising, tracking, analytics, or behavioural profiling cookies are used.</p>
+      <p data-lang="de">Diese Website verwendet ausschlie&szlig;lich technisch notwendige Cookies, die nach Art. 6 Abs. 1 lit. f DSGVO und &sect; 25 Abs. 2 TTDSG von der Einwilligungspflicht ausgenommen sind. Keine Werbe-, Tracking- oder Profiling-Cookies.</p>
+      <p data-lang="en"><strong>Google Fonts:</strong> Fonts loaded from Google LLC (Mountain View, CA, USA). Your browser transmits your IP address to Google. Legal basis: Art. 6(1)(f) GDPR. <a href="https://policies.google.com/privacy" target="_blank">policies.google.com/privacy</a></p>
+      <p data-lang="de"><strong>Google Fonts:</strong> Schriftarten von Google LLC (Mountain View, CA, USA). Ihr Browser &uuml;bermittelt Ihre IP-Adresse an Google. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. <a href="https://policies.google.com/privacy" target="_blank">policies.google.com/privacy</a></p>
+      <p data-lang="en"><strong>GitHub Pages (Hosting):</strong> Hosted via GitHub Inc. (San Francisco, CA, USA), a Microsoft subsidiary. DPA in place. Legal basis: Art. 6(1)(f) GDPR. <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank">GitHub Privacy Statement</a></p>
+      <p data-lang="de"><strong>GitHub Pages (Hosting):</strong> Gehostet &uuml;ber GitHub Inc. (San Francisco, CA, USA), ein Microsoft-Tochterunternehmen. AVV vorhanden. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank">GitHub-Datenschutzerkl&auml;rung</a></p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">12 &middot; Social Media Presence</span><span data-lang="de">12 &middot; Social-Media-Pr&auml;senz</span></div>
+      <p data-lang="en">VDM 360&deg; maintains official pages on LinkedIn, Instagram, Facebook, X (Twitter), YouTube, and TikTok. We receive only anonymised, aggregated page insights. Where Art. 26 GDPR joint controllership applies, agreements are in place with each platform.</p>
+      <p data-lang="de">VDM 360&deg; unterhält offizielle Seiten auf LinkedIn, Instagram, Facebook, X (Twitter), YouTube und TikTok. Wir erhalten nur anonymisierte, aggregierte Seitenstatistiken. Soweit Art. 26 DSGVO gilt, bestehen entsprechende Vereinbarungen mit den jeweiligen Plattformen.</p>
+      <ul data-lang="en">
+        <li><strong>LinkedIn:</strong> LinkedIn Ireland Unlimited Company, Dublin 2, Ireland / LinkedIn Corp., Sunnyvale, CA, USA &mdash; <a href="https://linkedin.com/legal/privacy-policy" target="_blank">Privacy Policy</a></li>
+        <li><strong>Instagram / Facebook:</strong> Meta Platforms Ireland Ltd., Dublin 2, Ireland / Meta Platforms Inc., Menlo Park, CA, USA &mdash; <a href="https://privacycenter.instagram.com/policy" target="_blank">Instagram</a> &middot; <a href="https://www.facebook.com/privacy/policy" target="_blank">Facebook</a></li>
+        <li><strong>X (Twitter):</strong> X Corp., San Francisco, CA, USA / Twitter International Unlimited Company, Dublin 2, Ireland &mdash; <a href="https://twitter.com/en/privacy" target="_blank">Privacy Policy</a></li>
+        <li><strong>YouTube:</strong> Google Ireland Ltd., Dublin 4, Ireland / Google LLC, Mountain View, CA, USA &mdash; <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a></li>
+        <li><strong>TikTok:</strong> TikTok Technology Ltd., Dublin, Ireland / TikTok Inc., Culver City, CA, USA &mdash; <a href="https://www.tiktok.com/legal/page/eea/privacy-policy/en" target="_blank">Privacy Policy</a></li>
+      </ul>
+      <ul data-lang="de">
+        <li><strong>LinkedIn:</strong> LinkedIn Ireland Unlimited Company, Dublin 2, Irland / LinkedIn Corp., Sunnyvale, CA, USA &mdash; <a href="https://linkedin.com/legal/privacy-policy" target="_blank">Datenschutzrichtlinie</a></li>
+        <li><strong>Instagram / Facebook:</strong> Meta Platforms Ireland Ltd., Dublin 2, Irland / Meta Platforms Inc., Menlo Park, CA, USA &mdash; <a href="https://privacycenter.instagram.com/policy" target="_blank">Instagram</a> &middot; <a href="https://www.facebook.com/privacy/policy" target="_blank">Facebook</a></li>
+        <li><strong>X (Twitter):</strong> X Corp., San Francisco, CA, USA / Twitter International Unlimited Company, Dublin 2, Irland &mdash; <a href="https://twitter.com/en/privacy" target="_blank">Datenschutzrichtlinie</a></li>
+        <li><strong>YouTube:</strong> Google Ireland Ltd., Dublin 4, Irland / Google LLC, Mountain View, CA, USA &mdash; <a href="https://policies.google.com/privacy" target="_blank">Datenschutzrichtlinie</a></li>
+        <li><strong>TikTok:</strong> TikTok Technology Ltd., Dublin, Irland / TikTok Inc., Culver City, CA, USA &mdash; <a href="https://www.tiktok.com/legal/page/eea/privacy-policy/en" target="_blank">Datenschutzrichtlinie</a></li>
+      </ul>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">13 &middot; Third-Party Services &amp; Processors</span><span data-lang="de">13 &middot; Drittanbieter &amp; Auftragsverarbeiter</span></div>
+      <p data-lang="en">Data Processing Agreements (DPAs) in place with each processor. Transfer safeguards: EU-US Data Privacy Framework and Standard Contractual Clauses (SCCs).</p>
+      <p data-lang="de">Auftragsverarbeitungsvertr&auml;ge (AVV) mit jedem Auftragsverarbeiter. &Uuml;bermittlungsgarantien: EU-US-Datenschutzrahmen und Standardvertragsklauseln (SCC).</p>
+      <ul data-lang="en">
+        <li><strong>Microsoft 365 / SharePoint / Teams:</strong> Microsoft Corp., Redmond, WA, USA / Microsoft Ireland Operations Ltd., Dublin 18, Ireland &mdash; <a href="https://privacy.microsoft.com" target="_blank">privacy.microsoft.com</a></li>
+        <li><strong>GitHub Pages:</strong> GitHub Inc., San Francisco, CA, USA &mdash; <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank">GitHub Privacy Statement</a></li>
+        <li><strong>Google Fonts:</strong> Google LLC, Mountain View, CA, USA &mdash; <a href="https://policies.google.com/privacy" target="_blank">policies.google.com/privacy</a></li>
+      </ul>
+      <ul data-lang="de">
+        <li><strong>Microsoft 365 / SharePoint / Teams:</strong> Microsoft Corp., Redmond, WA, USA / Microsoft Ireland Operations Ltd., Dublin 18, Irland &mdash; <a href="https://privacy.microsoft.com" target="_blank">privacy.microsoft.com</a></li>
+        <li><strong>GitHub Pages:</strong> GitHub Inc., San Francisco, CA, USA &mdash; <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank">GitHub-Datenschutzerkl&auml;rung</a></li>
+        <li><strong>Google Fonts:</strong> Google LLC, Mountain View, CA, USA &mdash; <a href="https://policies.google.com/privacy" target="_blank">policies.google.com/privacy</a></li>
+      </ul>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">14 &middot; Your Rights under GDPR (EU/EEA)</span><span data-lang="de">14 &middot; Ihre Rechte gem&auml;&szlig; DSGVO (EU/EWR)</span></div>
+      <ul data-lang="en">
+        <li><strong>Access (Art. 15)</strong> &mdash; obtain a copy of your personal data</li>
+        <li><strong>Rectification (Art. 16)</strong> &mdash; correct inaccurate or incomplete data</li>
+        <li><strong>Erasure (Art. 17)</strong> &mdash; request deletion where no lawful basis exists</li>
+        <li><strong>Restriction (Art. 18)</strong> &mdash; restrict processing in defined circumstances</li>
+        <li><strong>Portability (Art. 20)</strong> &mdash; receive data in machine-readable format</li>
+        <li><strong>Objection (Art. 21)</strong> &mdash; object to processing based on legitimate interests</li>
+        <li><strong>Withdraw Consent (Art. 7(3))</strong> &mdash; withdraw any consent at any time</li>
+      </ul>
+      <ul data-lang="de">
+        <li><strong>Auskunft (Art. 15)</strong> &mdash; Kopie Ihrer personenbezogenen Daten</li>
+        <li><strong>Berichtigung (Art. 16)</strong> &mdash; Korrektur unrichtiger oder unvollst&auml;ndiger Daten</li>
+        <li><strong>L&ouml;schung (Art. 17)</strong> &mdash; L&ouml;schung, wenn keine Rechtsgrundlage besteht</li>
+        <li><strong>Einschr&auml;nkung (Art. 18)</strong> &mdash; Einschr&auml;nkung der Verarbeitung</li>
+        <li><strong>Daten&uuml;bertragbarkeit (Art. 20)</strong> &mdash; Daten im maschinenlesbaren Format</li>
+        <li><strong>Widerspruch (Art. 21)</strong> &mdash; Widerspruch bei berechtigten Interessen</li>
+        <li><strong>Widerruf der Einwilligung (Art. 7 Abs. 3)</strong> &mdash; jederzeit m&ouml;glich</li>
+      </ul>
+      <p data-lang="en">Contact: <a href="mailto:info@vdm360.de">info@vdm360.de</a> &middot; Response within 30 days &middot; Supervisory authority: S&auml;chsischer Datenschutz- und Transparenzbeauftragter (SDT), Devrientstra&szlig;e 5, 01067 Dresden &middot; <a href="https://www.saechsdsb.de" target="_blank">www.saechsdsb.de</a></p>
+      <p data-lang="de">Kontakt: <a href="mailto:info@vdm360.de">info@vdm360.de</a> &middot; Antwort innerhalb 30 Tagen &middot; Aufsichtsbeh&ouml;rde: S&auml;chsischer Datenschutz- und Transparenzbeauftragter (SDT), Devrientstra&szlig;e 5, 01067 Dresden &middot; <a href="https://www.saechsdsb.de" target="_blank">www.saechsdsb.de</a></p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">15 &middot; Your Rights under CCPA/CPRA (California, USA)</span><span data-lang="de">15 &middot; Ihre Rechte gem&auml;&szlig; CCPA/CPRA (Kalifornien, USA)</span></div>
+      <ul data-lang="en">
+        <li><strong>Right to Know</strong> &mdash; disclosure of personal information collected, used, or disclosed in the preceding 12 months</li>
+        <li><strong>Right to Delete</strong> &mdash; deletion of personal information, subject to exceptions</li>
+        <li><strong>Right to Correct</strong> &mdash; correction of inaccurate personal information</li>
+        <li><strong>Right to Opt-Out</strong> &mdash; VDM 360&deg; does not sell or share personal data for cross-context behavioural advertising</li>
+        <li><strong>Right to Non-Discrimination</strong> &mdash; no discrimination for exercising privacy rights</li>
+      </ul>
+      <ul data-lang="de">
+        <li><strong>Recht auf Auskunft</strong> &mdash; Offenlegung der in den letzten 12 Monaten erhobenen Daten</li>
+        <li><strong>Recht auf L&ouml;schung</strong> &mdash; L&ouml;schung personenbezogener Informationen</li>
+        <li><strong>Recht auf Berichtigung</strong> &mdash; Korrektur unrichtiger Informationen</li>
+        <li><strong>Recht auf Opt-out</strong> &mdash; VDM 360&deg; verkauft keine personenbezogenen Daten</li>
+        <li><strong>Recht auf Nichtdiskriminierung</strong> &mdash; keine Benachteiligung bei Aus&uuml;bung der Datenschutzrechte</li>
+      </ul>
+      <p data-lang="en">Contact: <a href="mailto:info@vdm360.de">info@vdm360.de</a>. We respond within 45 days.</p>
+      <p data-lang="de">Kontakt: <a href="mailto:info@vdm360.de">info@vdm360.de</a>. Wir antworten innerhalb von 45 Tagen.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">16 &middot; Other US State Privacy Rights</span><span data-lang="de">16 &middot; Datenschutzrechte weiterer US-Bundesstaaten</span></div>
+      <ul data-lang="en">
+        <li><strong>Virginia (VCDPA)</strong> &mdash; access, correction, deletion, portability, opt-out of targeted advertising</li>
+        <li><strong>Colorado (CPA)</strong> &mdash; access, correction, deletion, portability, opt-out of profiling</li>
+        <li><strong>Connecticut (CTDPA)</strong> &mdash; access, correction, deletion, portability, opt-out</li>
+        <li><strong>Texas, Florida, and other states</strong> &mdash; applicable rights under respective state statutes</li>
+      </ul>
+      <ul data-lang="de">
+        <li><strong>Virginia (VCDPA)</strong> &mdash; Auskunft, Berichtigung, L&ouml;schung, &Uuml;bertragbarkeit, Opt-out gezielte Werbung</li>
+        <li><strong>Colorado (CPA)</strong> &mdash; Auskunft, Berichtigung, L&ouml;schung, &Uuml;bertragbarkeit, Opt-out Profiling</li>
+        <li><strong>Connecticut (CTDPA)</strong> &mdash; Auskunft, Berichtigung, L&ouml;schung, &Uuml;bertragbarkeit, Opt-out</li>
+        <li><strong>Texas, Florida und andere</strong> &mdash; anwendbare Rechte nach jeweiligem Landesrecht</li>
+      </ul>
+      <p><a href="mailto:info@vdm360.de">info@vdm360.de</a></p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">17 &middot; International Data Transfers</span><span data-lang="de">17 &middot; Internationale Daten&uuml;bermittlungen</span></div>
+      <p data-lang="en">Personal data may be transferred to and processed in countries outside the EEA, including the USA. Safeguards: EU-US Data Privacy Framework, Standard Contractual Clauses (Decision 2021/914), and adequacy decisions (Art. 45 GDPR). Copies available at <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+      <p data-lang="de">Personenbezogene Daten k&ouml;nnen in L&auml;nder au&szlig;erhalb des EWR &uuml;bermittelt werden. Garantien: EU-US-Datenschutzrahmen, Standardvertragsklauseln (Beschluss 2021/914) und Angemessenheitsbeschl&uuml;sse (Art. 45 DSGVO). Kopien unter <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">18 &middot; Data Retention</span><span data-lang="de">18 &middot; Datenspeicherung</span></div>
+      <ul data-lang="en">
+        <li>Contact enquiries &mdash; 3 years from last contact</li>
+        <li>Business correspondence &mdash; 6 years (&sect; 257 HGB)</li>
+        <li>Tax-relevant records &mdash; 10 years (&sect; 147 AO)</li>
+        <li>Website server logs &mdash; 30 days, then anonymised</li>
+        <li>Social media insights &mdash; as determined by platform (typically 28 days)</li>
+      </ul>
+      <ul data-lang="de">
+        <li>Kontaktanfragen &mdash; 3 Jahre ab letztem Kontakt</li>
+        <li>Gesch&auml;ftskorrespondenz &mdash; 6 Jahre (&sect; 257 HGB)</li>
+        <li>Steuerrelevante Unterlagen &mdash; 10 Jahre (&sect; 147 AO)</li>
+        <li>Website-Server-Logs &mdash; 30 Tage, danach anonymisiert</li>
+        <li>Social-Media-Statistiken &mdash; nach Plattformvorgabe (i.d.R. 28 Tage)</li>
+      </ul>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">19 &middot; Data Security</span><span data-lang="de">19 &middot; Datensicherheit</span></div>
+      <p data-lang="en">We implement appropriate technical and organisational measures (TOMs) pursuant to Art. 32 GDPR, including TLS/SSL encryption, access controls, and regular security reviews. In the event of a personal data breach we notify the competent supervisory authority within 72 hours (Art. 33 GDPR).</p>
+      <p data-lang="de">Wir setzen geeignete technische und organisatorische Ma&szlig;nahmen (TOM) gem&auml;&szlig; Art. 32 DSGVO um: TLS/SSL-Verschl&uuml;sselung, Zugriffskontrollen, regelm&auml;&szlig;ige Sicherheits&uuml;berpr&uuml;fungen. Im Falle einer Datenpanne benachrichtigen wir die Aufsichtsbeh&ouml;rde innerhalb von 72 Stunden (Art. 33 DSGVO).</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">20 &middot; Children's Privacy (COPPA / EU)</span><span data-lang="de">20 &middot; Datenschutz von Kindern (COPPA / EU)</span></div>
+      <p data-lang="en">This website is directed exclusively at business professionals and does not knowingly collect personal data from children under 16 (EU, Art. 8 GDPR) or 13 (USA, COPPA). If you believe a child has submitted personal data, contact <a href="mailto:info@vdm360.de">info@vdm360.de</a> immediately.</p>
+      <p data-lang="de">Diese Website richtet sich ausschlie&szlig;lich an Gesch&auml;ftsleute und erhebt wissentlich keine Daten von Kindern unter 16 Jahren (EU, Art. 8 DSGVO) bzw. 13 Jahren (USA, COPPA). Falls ein Kind Daten &uuml;bermittelt hat, kontaktieren Sie sofort <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">21 &middot; Email Communications (CAN-SPAM / GDPR)</span><span data-lang="de">21 &middot; E-Mail-Kommunikation (CAN-SPAM / DSGVO)</span></div>
+      <p data-lang="en">Marketing emails from VDM 360&deg; comply with GDPR Art. 6(1)(a) (double opt-in), the CAN-SPAM Act, and UWG &sect; 7. Unsubscribe at any time: <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+      <p data-lang="de">Marketing-E-Mails von VDM 360&deg; entsprechen DSGVO Art. 6 Abs. 1 lit. a (Double-Opt-in), dem CAN-SPAM Act sowie &sect; 7 UWG. Abmeldung jederzeit: <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">22 &middot; Liability for Content (TMG)</span><span data-lang="de">22 &middot; Haftung f&uuml;r Inhalte (TMG)</span></div>
+      <p data-lang="en">VDM 360&deg; is responsible for its own content pursuant to &sect; 7 para. 1 TMG. Under &sect;&sect; 8&ndash;10 TMG we are not obligated to monitor third-party information. Liability arises only from the point a concrete legal infringement becomes known, whereupon we take immediate remedial action.</p>
+      <p data-lang="de">VDM 360&deg; ist gem&auml;&szlig; &sect; 7 Abs. 1 TMG f&uuml;r eigene Inhalte verantwortlich. Nach &sect;&sect; 8&ndash;10 TMG sind wir nicht verpflichtet, fremde Informationen zu &uuml;berwachen. Eine Haftung ist erst ab Kenntnis einer Rechtsverletzung m&ouml;glich; wir ergreifen dann umgehend Abh&auml;lfema&szlig;nahmen.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">23 &middot; Liability for Links</span><span data-lang="de">23 &middot; Haftung f&uuml;r Links</span></div>
+      <p data-lang="en">We accept no liability for the content of external third-party websites. Linked pages were checked for legal violations at the time of linking. Upon notification of violations we remove the relevant links immediately.</p>
+      <p data-lang="de">F&uuml;r Inhalte verlinkter Drittseiten &uuml;bernehmen wir keine Gew&auml;hr. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung gepr&uuml;ft. Bei Bekanntwerden von Rechtsverletzungen entfernen wir derartige Links umgehend.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">24 &middot; Copyright</span><span data-lang="de">24 &middot; Urheberrecht</span></div>
+      <p data-lang="en">All content on this website is subject to German copyright law (UrhG) and applicable international treaties. Reproduction or distribution beyond copyright law limits requires prior written consent of VDM 360&deg;. Notify copyright infringements at <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+      <p data-lang="de">Alle Inhalte unterliegen dem deutschen Urheberrecht (UrhG) und anwendbaren internationalen Abkommen. Vervielf&auml;ltigung oder Verbreitung bed&uuml;rfen der schriftlichen Zustimmung von VDM 360&deg;. Urheberrechtsverletzungen bitte melden an <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">25 &middot; Dispute Resolution</span><span data-lang="de">25 &middot; Streitbeilegung</span></div>
+      <p data-lang="en"><strong>EU ODR Platform:</strong> <a href="https://ec.europa.eu/consumers/odr" target="_blank">ec.europa.eu/consumers/odr</a>. Our ODR email: <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+      <p data-lang="de"><strong>EU-ODR-Plattform:</strong> <a href="https://ec.europa.eu/consumers/odr" target="_blank">ec.europa.eu/consumers/odr</a>. Unsere ODR-E-Mail: <a href="mailto:info@vdm360.de">info@vdm360.de</a>.</p>
+      <p data-lang="en">VDM 360&deg; is not obligated to and does not voluntarily participate in consumer arbitration proceedings (&sect; 36 para. 1 no. 1 VSBG). Governing law: Federal Republic of Germany.</p>
+      <p data-lang="de">VDM 360&deg; ist nicht bereit und nicht verpflichtet, an Verbraucherstreitschlichtungsverfahren teilzunehmen (&sect; 36 Abs. 1 Nr. 1 VSBG). Anwendbares Recht: Bundesrepublik Deutschland.</p>
+    </div>
+    <div class="imp-section">
+      <div class="imp-stitle"><span data-lang="en">26 &middot; Changes to this Policy</span><span data-lang="de">26 &middot; &Auml;nderungen dieser Erkl&auml;rung</span></div>
+      <p data-lang="en">VDM 360&deg; reserves the right to update this Legal Notice and Privacy Policy at any time. The date of the last update is shown above. Continued use of the website after changes constitutes acknowledgement of the updated policy.</p>
+      <p data-lang="de">VDM 360&deg; beh&auml;lt sich das Recht vor, dieses Impressum und diese Datenschutzerkl&auml;rung jederzeit zu aktualisieren. Das Datum der letzten Aktualisierung ist oben angegeben. Die fortgesetzte Nutzung der Website nach &Auml;nderungen gilt als Kenntnisnahme.</p>
+    </div>
+  </div>
+</div>
+<script>
+function setLang(lang){
+  document.getElementById('html-root').setAttribute('lang',lang);
+  document.getElementById('btn-en').classList.toggle('active',lang==='en');
+  document.getElementById('btn-de').classList.toggle('active',lang==='de');
+  localStorage.setItem('vdm-lang',lang);
+}
+const saved=localStorage.getItem('vdm-lang');
+if(saved==='de')setLang('de');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),60);obs.unobserve(e.target);}
+  });
+},{threshold:0.04});
+document.querySelectorAll('.fade').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
